@@ -103,7 +103,7 @@ func (qb *QueryBuilder) OrWhereLike(column string, value interface{}) *QueryBuil
 	return qb
 }
 
-func (qb *QueryBuilder) Exec() ([]map[string]interface{}, error) {
+func (qb *QueryBuilder) Exec() ([]byte, error) {
 	qb.Compiler.SetOptionsBuilder(qb.Statements, qb.Simple)
 	result, err := qb.Compiler.Exec()
 	qb.Reset()

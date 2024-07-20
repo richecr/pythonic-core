@@ -2,6 +2,7 @@ package query
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -128,7 +129,7 @@ func (qc *QueryCompiler) SetOptionsBuilder(statements []model.Statements, simple
 	qc.Simple = simple
 }
 
-func (qc *QueryCompiler) Exec() ([]map[string]interface{}, error) {
+func (qc *QueryCompiler) Exec() ([]byte, error) {
 	query := qc.Simple.Raw.Sql
 	if query == "" {
 		query = qc.ToSQL()
@@ -208,8 +209,12 @@ func (qc *QueryCompiler) Exec() ([]map[string]interface{}, error) {
 		}
 	}
 
-	fmt.Println("result", result)
-	return result, nil
+	jsonResult, err := json.Marshal(result)
+	if err != nil {
+		return nil, err
+	}
+
+	return jsonResult, nil
 }
 
 func (qc *QueryCompiler) Reset() {
