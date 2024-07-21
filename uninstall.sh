@@ -1,4 +1,4 @@
-cd pythonicsql
+cd pythonic_core
 wheel_file=$(ls dist/*.whl | head -n1); pip uninstall $wheel_file -y
 cd ..
-rm -rf pythonicsql/
+rm -rf pythonic_core/

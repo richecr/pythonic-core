@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/richecr/pythonicsqlgo/lib/query/model"
+	"github.com/richecr/pythonic_core/lib/query/model"
 )
 
 type QueryCompiler struct {
@@ -147,21 +147,27 @@ func (qc *QueryCompiler) Exec() ([]byte, error) {
 
 		cols, err := rows.Columns()
 		if err != nil {
-			fmt.Println(err)
+			return nil, fmt.Errorf("error: %s", err)
 		}
+
 		colTypes, err := rows.ColumnTypes()
 		if err != nil {
-			fmt.Println(err)
-			return nil, err
+			return nil, fmt.Errorf("error: %s", err)
 		}
 
 		vals := make([]interface{}, len(cols))
 		for i, ct := range colTypes {
 			switch ct.DatabaseTypeName() {
-			case "VARCHAR", "TEXT":
+			case "VARCHAR", "TEXT", "NVARCHAR":
 				vals[i] = new(string)
 			case "INT":
 				vals[i] = new(int)
+			case "BIGINT":
+				vals[i] = new(int64)
+			case "DECIMAL":
+				vals[i] = new(float64)
+			case "BOOL":
+				vals[i] = new(bool)
 			default:
 				vals[i] = new(interface{})
 			}
@@ -175,8 +181,7 @@ func (qc *QueryCompiler) Exec() ([]byte, error) {
 
 			err = rows.Scan(scanArgs...)
 			if err != nil {
-				fmt.Println(err)
-				continue
+				return nil, fmt.Errorf("error: %s", err)
 			}
 
 			rowMap := make(map[string]interface{})
@@ -193,6 +198,18 @@ func (qc *QueryCompiler) Exec() ([]byte, error) {
 					if v != nil {
 						val = *v
 					}
+				case *int64:
+					if v != nil {
+						val = *v
+					}
+				case *float64:
+					if v != nil {
+						val = *v
+					}
+				case *bool:
+					if v != nil {
+						val = *v
+					}
 				default:
 					val = v
 				}
@@ -205,13 +222,13 @@ func (qc *QueryCompiler) Exec() ([]byte, error) {
 	} else {
 		_, err := qc.Client.Exec(query)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("error: %s", err)
 		}
 	}
 
 	jsonResult, err := json.Marshal(result)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error: %s", err)
 	}
 
 	return jsonResult, nil

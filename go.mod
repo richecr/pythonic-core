@@ -1,4 +1,4 @@
-module github.com/richecr/pythonicsqlgo
+module github.com/richecr/pythonic_core
 
 go 1.21.1
 

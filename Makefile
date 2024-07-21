@@ -1,5 +1,5 @@
 generate:
-	gopy pkg -name=pythonicsql -rename=true -author="Rich Ramalho" -email="richelton14@gmail.com" -desc="The unofficial HLTV Python API" -url="https://github.com/richecr/pythonicsqlgo" -output=pythonicsql -vm=`which python` github.com/richecr/pythonicsqlgo github.com/richecr/pythonicsqlgo/lib/pythonic github.com/richecr/pythonicsqlgo/lib/query github.com/richecr/pythonicsqlgo/lib/dialects
+	gopy pkg -name=pythonic_core -rename=true -author="Rich Ramalho" -email="richelton14@gmail.com" -desc="The unofficial HLTV Python API" -url="https://github.com/richecr/pythonic_core" -output=pythonic_core -vm=`which python` github.com/richecr/pythonic_core github.com/richecr/pythonic_core/lib/pythonic github.com/richecr/pythonic_core/lib/query github.com/richecr/pythonic_core/lib/dialects
 
 install:
 	./install.sh

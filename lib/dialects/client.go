@@ -5,8 +5,9 @@ import (
 	"fmt"
 
 	_ "github.com/lib/pq"
+	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/richecr/pythonicsqlgo/lib/query"
+	"github.com/richecr/pythonic_core/lib/query"
 )
 
 type Client struct {
@@ -29,23 +30,25 @@ func NewClient(dialect string, uri string) *Client {
 	return client
 }
 
-func (c *Client) init() {
+func (c *Client) init() error {
 	db, err := sql.Open(c.Dialect, c.Uri)
 	if err != nil {
-		fmt.Println("Ops! Ocorreu um erro ao abrir a conexão com o banco de dados.")
+		return fmt.Errorf("error: %s", err.Error())
+	} else {
+		c.Database = db
+		c.Compiler = query.NewQueryCompiler(db)
+		c.Builder = query.NewQueryBuilder(c.Compiler)
 	}
-	fmt.Println("Conexão com o banco de dados estabelecida com sucesso!")
-	c.Database = db
-	c.Compiler = query.NewQueryCompiler(db)
-	c.Builder = query.NewQueryBuilder(c.Compiler)
+
+	return nil
 }
 
-func (c *Client) Connect() error {
+func (c *Client) IsConnected() (bool, error) {
 	err := c.Database.Ping()
 	if err != nil {
-		return err
+		return false, fmt.Errorf("error: %s", err.Error())
 	}
-	return nil
+	return true, nil
 }
 
 func (c *Client) Disconnect() error {

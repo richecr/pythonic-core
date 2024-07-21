@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/richecr/pythonicsqlgo/lib/query/model"
+	"github.com/richecr/pythonic_core/lib/query/model"
 )
 
 type QueryBuilder struct {

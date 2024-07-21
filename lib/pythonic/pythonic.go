@@ -1,9 +1,11 @@
 package pythonic
 
 import (
-	"github.com/richecr/pythonicsqlgo/lib/dialects"
-	"github.com/richecr/pythonicsqlgo/lib/query"
-	"github.com/richecr/pythonicsqlgo/lib/query/model"
+	"fmt"
+
+	"github.com/richecr/pythonic_core/lib/dialects"
+	"github.com/richecr/pythonic_core/lib/query"
+	"github.com/richecr/pythonic_core/lib/query/model"
 )
 
 type PythonicSQL struct {
@@ -21,10 +23,10 @@ func NewPythonicSQL(config model.DatabaseConfiguration) (*PythonicSQL, error) {
 
 	client, err := sql.getClient()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error: %s", err.Error())
 	}
 	sql.Client = *client
-	sql.Query = *&client.Builder
+	sql.Query = client.Builder
 
 	return sql, nil
 }
