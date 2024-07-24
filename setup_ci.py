@@ -63,6 +63,11 @@ class CustomBuildExt(build_ext):
             f.write(f"from .{PACKAGE_NAME} import *")
 
 
+class BinaryDistribution(setuptools.Distribution):
+    def has_ext_modules(_):
+        return True
+
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -85,6 +90,7 @@ setuptools.setup(
     cmdclass={
         "build_ext": CustomBuildExt,
     },
+    distclass=BinaryDistribution,
     ext_modules=[
         Extension(
             PACKAGE_NAME,
