@@ -3,10 +3,10 @@ import os
 import subprocess
 import sys
 import re
-from distutils.core import Extension
 
 import setuptools
 from setuptools.command.build_ext import build_ext
+from setuptools.extension import Extension
 
 
 def normalize(name):  # https://peps.python.org/pep-0503/#normalized-names
